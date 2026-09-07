@@ -286,16 +286,47 @@ body.popup-open{overflow:hidden}
 <footer><b>SHRI TULSI VATIKA</b><span>Premium Residential Plots • Gated Township</span><small>Information based on the supplied project brochure. Prices, availability, approvals and terms should be independently confirmed before booking.</small></footer>
 
 <script>
+/* Google Sheets integration — paste your Web App /exec URL below */
+var GOOGLE_SHEETS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+function sendToSheet(payload){
+  if(!GOOGLE_SHEETS_URL || GOOGLE_SHEETS_URL.indexOf('YOUR_GOOGLE') === 0){
+    return Promise.reject(new Error('Google Sheets URL not configured yet'));
+  }
+  return fetch(GOOGLE_SHEETS_URL,{
+    method:'POST',
+    mode:'no-cors',
+    redirect:'follow',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(payload)
+  });
+}
+
 const header=document.querySelector('.site-header');
 document.querySelector('.menu-btn').addEventListener('click',()=>header.classList.toggle('nav-open'));
 document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>header.classList.remove('nav-open')));
 
 document.getElementById('leadForm').addEventListener('submit', function(e){
   e.preventDefault();
-  const data=new FormData(this);
+  const form=this;
+  const data=new FormData(form);
   const msg=document.getElementById('formMsg');
-  msg.textContent=`Thank you, ${data.get('name')}. Your enquiry has been recorded on this page. Connect this form to your CRM/WhatsApp endpoint to receive leads.`;
-  this.reset();
+  const button=form.querySelector('button[type="submit"]');
+  const payload={};
+  data.forEach((v,k)=>payload[k]=v);
+  payload.source='Enquire Section';
+  payload.timestamp=new Date().toISOString();
+  button.disabled=true;
+  sendToSheet(payload)
+    .then(()=>{
+      msg.textContent=`Thank you, ${payload.name}. Our team will contact you shortly.`;
+      msg.style.setProperty('color','#48704e','important');
+      form.reset();
+    })
+    .catch(()=>{
+      msg.textContent='Something went wrong. Please try again or call +91 95604 59051.';
+      msg.style.setProperty('color','#b3261e','important');
+      button.disabled=false;
+    });
 });
 
 </script>
@@ -385,11 +416,26 @@ document.getElementById('leadForm').addEventListener('submit', function(e){
   form.addEventListener('submit',function(e){
     e.preventDefault();
     const button=form.querySelector('button[type="submit"]');
+    const data=new FormData(form);
+    const payload={};
+    data.forEach((v,k)=>payload[k]=v);
+    payload.source='Lead Popup';
+    payload.timestamp=new Date().toISOString();
     button.disabled=true;
-    button.textContent='Request Sent ✓';
+    button.textContent='Sending...';
     msg.style.display='block';
-    msg.textContent='Thank you! Our team will contact you shortly.';
-    setTimeout(closePopup,1800);
+    sendToSheet(payload)
+      .then(()=>{
+        msg.textContent='Thank you! Our team will contact you shortly.';
+        msg.style.setProperty('color','#48704e','important');
+        setTimeout(closePopup,1800);
+      })
+      .catch(()=>{
+        msg.textContent='Network issue - please call us on +91 95604 59051.';
+        msg.style.setProperty('color','#b3261e','important');
+        button.disabled=false;
+        button.textContent='Request Call Back';
+      });
   });
 })();
 </script>
