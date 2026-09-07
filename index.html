@@ -318,7 +318,7 @@ document.getElementById('leadForm').addEventListener('submit', function(e){
   button.disabled=true;
   sendToSheet(payload)
     .then(()=>{
-      msg.textContent=`Thank you, ${payload.name}. Our team will contact you shortly.`;
+      msg.textContent='Our consultant will get in touch shortly.';
       msg.style.setProperty('color','#48704e','important');
       form.reset();
     })
