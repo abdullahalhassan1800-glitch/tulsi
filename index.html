@@ -19,33 +19,37 @@
   z-index:9000;
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:24px;
-  padding:16px 4%;
+  gap:14px;
+  padding:14px 4%;
   background:#121722;
   box-shadow:0 -8px 28px rgba(0,0,0,.28);
 }
 .quick-action{
-  min-height:178px;
-  border-radius:30px;
+  min-height:64px;
+  border-radius:99px;
   display:flex;
-  flex-direction:column;
+  flex-direction:row;
   align-items:center;
   justify-content:center;
+  gap:10px;
+  padding:0 16px;
   text-decoration:none;
   font-weight:800;
-  letter-spacing:1px;
-  font-size:34px;
+  letter-spacing:.8px;
+  font-size:16px;
+  white-space:nowrap;
   transition:transform .2s ease,filter .2s ease;
 }
 .quick-action:hover{transform:translateY(-2px);filter:brightness(1.06)}
-.quick-action .qa-icon{font-size:66px;line-height:1;margin-bottom:14px}
+.quick-action svg{width:22px;height:22px;flex:none}
+.quick-action .qa-label{line-height:1.2}
 .quick-call{background:#063563;color:#fff}
 .quick-whatsapp{background:#20d265;color:#fff}
 .quick-visit{background:#d9b536;color:#101722}
 @media(max-width:700px){
-  .quick-actions{gap:10px;padding:9px 8px}
-  .quick-action{min-height:76px;border-radius:16px;font-size:14px;letter-spacing:.5px}
-  .quick-action .qa-icon{font-size:31px;margin-bottom:5px}
+  .quick-actions{gap:8px;padding:9px 8px}
+  .quick-action{min-height:58px;border-radius:14px;flex-direction:column;gap:4px;padding:6px 4px;font-size:11px;letter-spacing:.4px}
+  .quick-action svg{width:22px;height:22px}
 }
 body{padding-bottom:210px}
 @media(max-width:700px){body{padding-bottom:95px}}
@@ -286,119 +290,23 @@ document.getElementById('leadForm').addEventListener('submit', function(e){
   this.reset();
 });
 
-document.querySelectorAll('.gallery img').forEach(img=>{
-  img.addEventListener('click',()=>{
-    const w=window.open('');
-    w.document.write(`<title>Shri Tulsi Vatika</title><body style="margin:0;background:#111;display:grid;place-items:center;height:100vh"><img src="${img.src}" style="max-width:96%;max-height:96%;object-fit:contain">
-<div class="lead-popup" id="leadPopup" aria-hidden="true">
-  <div class="popup-box" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
-    <button class="popup-close" id="popupClose" aria-label="Close">×</button>
-    <div class="popup-top">
-      <span class="eyebrow">LIMITED PLOTS AVAILABLE</span>
-      <h3 id="popupTitle">Book a Site Visit</h3>
-      <p>Fill in your details and our team will reach out within 15 minutes.</p>
-    </div>
-    <div class="popup-body">
-      <form id="popupForm">
-        <input required name="name" placeholder="Your Name" autocomplete="name">
-        <input required name="phone" type="tel" inputmode="tel" placeholder="Phone Number" autocomplete="tel">
-        <input name="email" type="email" placeholder="Email (optional)" autocomplete="email">
-        <input required name="city" placeholder="City" autocomplete="address-level2">
-        <select required name="plot_size">
-          <option value="">Select Plot Size</option>
-          <option>100 Gaj</option>
-          <option>200 Gaj</option>
-          <option>200+ Gaj</option>
-        </select>
-        <select required name="plot_type">
-          <option value="">Select Plot Type</option>
-          <option>Residential Plot</option>
-          <option>Commercial Plot</option>
-          <option>2 Side Open Plot</option>
-          <option>Single Side Open Plot</option>
-        </select>
-        <textarea name="message" placeholder="Message (optional)"></textarea>
-        <button class="btn primary popup-submit" type="submit">Request Call Back</button>
-        <p class="popup-msg" id="popupMsg"></p>
-        <p class="popup-note">By submitting, you agree to be contacted regarding Shri Tulsi Vatika.</p>
-      </form>
-    </div>
-  </div>
-</div>
-</div>
-
-<script>
-/* 1.5-second lead popup */
-(function(){
-  const popup=document.getElementById('leadPopup');
-  const close=document.getElementById('popupClose');
-  const form=document.getElementById('popupForm');
-  const msg=document.getElementById('popupMsg');
-
-  function openPopup(){
-    popup.classList.add('show');
-    popup.setAttribute('aria-hidden','false');
-    document.body.classList.add('popup-open');
-  }
-  function closePopup(){
-    popup.classList.remove('show');
-    popup.setAttribute('aria-hidden','true');
-    document.body.classList.remove('popup-open');
-  }
-
-  window.setTimeout(openPopup,1500);
-
-  close.addEventListener('click',closePopup);
-  popup.addEventListener('click',e=>{
-    if(e.target===popup) closePopup();
-  });
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape' && popup.classList.contains('show')) closePopup();
-  });
-
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    const button=form.querySelector('button[type="submit"]');
-    button.disabled=true;
-    button.textContent='Request Sent ✓';
-    msg.style.display='block';
-    msg.textContent='Thank you! Our team will contact you shortly.';
-    setTimeout(closePopup,1800);
-  });
-})();
-
-document.getElementById('quickBookVisit')?.addEventListener('click',function(e){
-  e.preventDefault();
-  const popup=document.getElementById('leadPopup');
-  if(popup){
-    popup.classList.add('show');
-    popup.setAttribute('aria-hidden','false');
-    document.body.classList.add('popup-open');
-  }
-});
-
 </script>
 
 <div class="quick-actions" aria-label="Quick actions">
   <a class="quick-action quick-call" href="tel:+919560459051" aria-label="Call Now">
-    <span class="qa-icon">☎</span>
-    <span>CALL NOW</span>
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.25 1.02z"/></svg>
+    <span class="qa-label">CALL NOW</span>
   </a>
   <a class="quick-action quick-whatsapp" href="https://wa.me/919560459051?text=Hello%2C%20I%20am%20interested%20in%20Shri%20Tulsi%20Vatika." target="_blank" rel="noopener" aria-label="WhatsApp">
-    <span class="qa-icon">◔</span>
-    <span>WHATSAPP</span>
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.42 15.04L2 22l5.11-1.57A9.9 9.9 0 1 0 12.04 2zm0 1.8a8.1 8.1 0 1 1-4.06 15.13L7 18.7l-1.6.49.52-1.57A8.1 8.1 0 0 1 12.04 3.8zm-3.9 4.1c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.03s.87 2.35 1 2.51c.13.16 1.7 2.66 4.19 3.65 2.06.82 2.48.66 2.93.62.45-.04 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28-.24-.12-1.44-.71-1.66-.79-.22-.08-.38-.12-.54.12-.16.24-.63.79-.77.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.11-.11.24-.29.36-.43.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.79-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3z"/></svg>
+    <span class="qa-label">WHATSAPP</span>
   </a>
   <a class="quick-action quick-visit" href="#enquire" id="quickBookVisit" aria-label="Book Visit">
-    <span class="qa-icon">☑</span>
-    <span>BOOK VISIT</span>
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zM7 12h5v5H7z"/></svg>
+    <span class="qa-label">BOOK VISIT</span>
   </a>
 </div>
 
-</body>`);
-  });
-});
-
-</script>
 
 <div class="lead-popup" id="leadPopup" aria-hidden="true">
   <div class="popup-box" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
