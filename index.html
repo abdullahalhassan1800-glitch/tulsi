@@ -287,7 +287,7 @@ body.popup-open{overflow:hidden}
 
 <script>
 /* Google Sheets integration — paste your Web App /exec URL below */
-var GOOGLE_SHEETS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+var GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwfgLRTvuZDxGnuZBoar1zI-EXAS6OfRYFSYADhVu5MPuKAY-Gh0QGTPtqOcSKaBXrX/exec';
 function sendToSheet(payload){
   if(!GOOGLE_SHEETS_URL || GOOGLE_SHEETS_URL.indexOf('YOUR_GOOGLE') === 0){
     return Promise.reject(new Error('Google Sheets URL not configured yet'));
