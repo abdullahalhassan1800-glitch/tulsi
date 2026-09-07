@@ -64,7 +64,8 @@ body{padding-bottom:210px}
 .popup-top{background:#fff;color:#1d2436;padding:42px 48px 18px}
 .popup-top .eyebrow{display:block;color:#a8873e;font-size:16px;letter-spacing:3px;font-weight:900}
 .popup-top h3{font:700 clamp(36px,6vw,48px)/1.05 Georgia,serif;margin:18px 0 12px;color:#192238}
-.popup-top p{margin:0;color:#626875;font-size:18px;line-height:1.55}
+.popup-top p{margin:0;color:#626875;font-size:18px;line-height:1.55;animation:popupFlash 1.2s infinite}
+@keyframes popupFlash{0%,100%{color:#d8b15b}50%{color:#626875}}
 .popup-body{padding:16px 48px 48px}
 .popup-body input,.popup-body select,.popup-body textarea{width:100%;padding:18px 25px;border:1px solid #ddd9ce;background:#faf7f0;border-radius:15px;margin-bottom:12px;font-size:18px;color:#303238;outline:none;font-family:inherit}
 .popup-body textarea{min-height:135px;resize:vertical}
