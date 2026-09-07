@@ -276,7 +276,10 @@ body.popup-open{overflow:hidden}
   <form id="leadForm">
     <input required name="name" placeholder="Your Name">
     <input required name="phone" type="tel" placeholder="Mobile Number">
-    <select name="plot"><option value="">Plot Requirement</option><option>Residential Plot</option><option>Commercial Plot</option><option>2 Side Open Plot</option><option>Single Side Open Plot</option></select>
+    <input name="email" type="email" placeholder="Email (optional)">
+    <input name="city" placeholder="City">
+    <select name="plot_size"><option value="">Select Plot Size</option><option>100 Gaj</option><option>200 Gaj</option><option>200+ Gaj</option></select>
+    <select name="plot_type"><option value="">Select Plot Type</option><option>Residential Plot</option><option>Commercial Plot</option><option>2 Side Open Plot</option><option>Single Side Open Plot</option></select>
     <button class="btn primary" type="submit">Request Callback</button>
     <p id="formMsg" class="form-msg"></p>
   </form>
@@ -311,24 +314,16 @@ document.getElementById('leadForm').addEventListener('submit', function(e){
   e.preventDefault();
   const form=this;
   const data=new FormData(form);
-  const msg=document.getElementById('formMsg');
   const button=form.querySelector('button[type="submit"]');
   const payload={};
   data.forEach((v,k)=>payload[k]=v);
   payload.source='Enquire Section';
   payload.timestamp=new Date().toISOString();
   button.disabled=true;
-  sendToSheet(payload)
-    .then(()=>{
-      msg.textContent='Our consultant will get in touch shortly.';
-      msg.style.setProperty('color','#48704e','important');
-      form.reset();
-    })
-    .catch(()=>{
-      msg.textContent='Something went wrong. Please try again or call +91 95604 59051.';
-      msg.style.setProperty('color','#b3261e','important');
-      button.disabled=false;
-    });
+  const submitToSheet=sendToSheet(payload).catch(()=>{}); /* dont block redirect on failure */
+  Promise.resolve(submitToSheet).then(()=>{
+    location.href='thankyou.html';
+  });
 });
 
 </script>
@@ -392,7 +387,6 @@ document.getElementById('leadForm').addEventListener('submit', function(e){
   const popup=document.getElementById('leadPopup');
   const close=document.getElementById('popupClose');
   const form=document.getElementById('popupForm');
-  const msg=document.getElementById('popupMsg');
 
   function openPopup(){
     popup.classList.add('show');
@@ -425,19 +419,9 @@ document.getElementById('leadForm').addEventListener('submit', function(e){
     payload.timestamp=new Date().toISOString();
     button.disabled=true;
     button.textContent='Sending...';
-    msg.style.display='block';
-    sendToSheet(payload)
-      .then(()=>{
-        msg.textContent='Thank you! Our team will contact you shortly.';
-        msg.style.setProperty('color','#48704e','important');
-        setTimeout(closePopup,1800);
-      })
-      .catch(()=>{
-        msg.textContent='Network issue - please call us on +91 95604 59051.';
-        msg.style.setProperty('color','#b3261e','important');
-        button.disabled=false;
-        button.textContent='Request Call Back';
-      });
+    sendToSheet(payload).catch(()=>{}).then(()=>{
+      location.href='thankyou.html';
+    });
   });
 })();
 </script>
